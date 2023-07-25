@@ -2,17 +2,14 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'color_pic_btn.dart';
+import 'package:flutter_drawing_board/src/color_pic_btn.dart';
 import 'drawing_controller.dart';
 
 import 'helper/ex_value_builder.dart';
 import 'helper/get_size.dart';
-import 'paint_contents/circle.dart';
 import 'paint_contents/eraser.dart';
-import 'paint_contents/rectangle.dart';
 import 'paint_contents/simple_line.dart';
 import 'paint_contents/smooth_line.dart';
-import 'paint_contents/straight_line.dart';
 import 'painter.dart';
 
 /// 默认工具栏构建器
@@ -94,34 +91,32 @@ class DrawingBoard extends StatefulWidget {
   final AlignmentGeometry alignment;
 
   /// 默认工具项列表
-  static List<DefToolItem> defaultTools(
-      Type currType, DrawingController controller) {
+  static List<DefToolItem> defaultTools(Type currType, DrawingController controller) {
     return <DefToolItem>[
       DefToolItem(
           isActive: currType == SimpleLine,
           icon: CupertinoIcons.pencil,
           onTap: () => controller.setPaintContent = SimpleLine()),
       DefToolItem(
-          isActive: currType == SmoothLine,
-          icon: Icons.brush,
-          onTap: () => controller.setPaintContent = SmoothLine()),
-      DefToolItem(
-          isActive: currType == StraightLine,
-          icon: Icons.show_chart,
-          onTap: () => controller.setPaintContent = StraightLine()),
-      DefToolItem(
-          isActive: currType == Rectangle,
-          icon: CupertinoIcons.stop,
-          onTap: () => controller.setPaintContent = Rectangle()),
-      DefToolItem(
-          isActive: currType == Circle,
-          icon: CupertinoIcons.circle,
-          onTap: () => controller.setPaintContent = Circle()),
+          isActive: currType == SmoothLine, icon: Icons.brush, onTap: () => controller.setPaintContent = SmoothLine()),
+
+      /// <---------- Temporarily hide function ---------->
+      // DefToolItem(
+      //     isActive: currType == StraightLine,
+      //     icon: Icons.show_chart,
+      //     onTap: () => controller.setPaintContent = StraightLine()),
+      // DefToolItem(
+      //     isActive: currType == Rectangle,
+      //     icon: CupertinoIcons.stop,
+      //     onTap: () => controller.setPaintContent = Rectangle()),
+      // DefToolItem(
+      //     isActive: currType == Circle,
+      //     icon: CupertinoIcons.circle,
+      //     onTap: () => controller.setPaintContent = Circle()),
       DefToolItem(
           isActive: currType == Eraser,
           icon: CupertinoIcons.bandage,
-          onTap: () =>
-              controller.setPaintContent = Eraser(color: Colors.white)),
+          onTap: () => controller.setPaintContent = Eraser(color: Colors.black)),
     ];
   }
 
@@ -130,8 +125,7 @@ class DrawingBoard extends StatefulWidget {
 }
 
 class _DrawingBoardState extends State<DrawingBoard> {
-  late final DrawingController _controller =
-      widget.controller ?? DrawingController();
+  late final DrawingController _controller = widget.controller ?? DrawingController();
 
   @override
   void dispose() {
@@ -144,8 +138,7 @@ class _DrawingBoardState extends State<DrawingBoard> {
     Widget content = InteractiveViewer(
       maxScale: widget.maxScale,
       minScale: widget.minScale,
-      boundaryMargin: widget.boardBoundaryMargin ??
-          EdgeInsets.all(MediaQuery.of(context).size.width),
+      boundaryMargin: widget.boardBoundaryMargin ?? EdgeInsets.all(MediaQuery.of(context).size.width),
       clipBehavior: widget.boardClipBehavior,
       panAxis: widget.panAxis,
       constrained: widget.boardConstrained,
@@ -171,10 +164,8 @@ class _DrawingBoardState extends State<DrawingBoard> {
     }
 
     return Listener(
-      onPointerDown: (PointerDownEvent pde) =>
-          _controller.addFingerCount(pde.localPosition),
-      onPointerUp: (PointerUpEvent pue) =>
-          _controller.reduceFingerCount(pue.localPosition),
+      onPointerDown: (PointerDownEvent pde) => _controller.addFingerCount(pde.localPosition),
+      onPointerUp: (PointerUpEvent pue) => _controller.reduceFingerCount(pue.localPosition),
       child: content,
     );
   }
@@ -185,8 +176,7 @@ class _DrawingBoardState extends State<DrawingBoard> {
       key: _controller.painterKey,
       child: ExValueBuilder<DrawConfig>(
         valueListenable: _controller.drawConfig,
-        shouldRebuild: (DrawConfig p, DrawConfig n) =>
-            p.angle != n.angle || p.size != n.size,
+        shouldRebuild: (DrawConfig p, DrawConfig n) => p.angle != n.angle || p.size != n.size,
         builder: (_, DrawConfig dc, Widget? child) {
           Widget c = child!;
 
@@ -254,37 +244,30 @@ class _DrawingBoardState extends State<DrawingBoard> {
         padding: EdgeInsets.zero,
         child: Row(
           children: <Widget>[
-            SizedBox(
-              height: 24,
-              width: 160,
-              child: ExValueBuilder<DrawConfig>(
-                valueListenable: _controller.drawConfig,
-                shouldRebuild: (DrawConfig p, DrawConfig n) =>
-                    p.strokeWidth != n.strokeWidth,
-                builder: (_, DrawConfig dc, ___) {
-                  return Slider(
-                    value: dc.strokeWidth,
-                    max: 50,
-                    min: 1,
-                    onChanged: (double v) =>
-                        _controller.setStyle(strokeWidth: v),
-                  );
-                },
-              ),
-            ),
-            ColorPicBtn(controller: _controller),
-            IconButton(
-                icon: const Icon(CupertinoIcons.arrow_turn_up_left),
-                onPressed: () => _controller.undo()),
-            IconButton(
-                icon: const Icon(CupertinoIcons.arrow_turn_up_right),
-                onPressed: () => _controller.redo()),
-            IconButton(
-                icon: const Icon(CupertinoIcons.rotate_right),
-                onPressed: () => _controller.turn()),
-            IconButton(
-                icon: const Icon(CupertinoIcons.trash),
-                onPressed: () => _controller.clear()),
+            /// <---------- Temporarily hide function ---------->
+            // SizedBox(
+            //   height: 24,
+            //   width: 160,
+            //   child: ExValueBuilder<DrawConfig>(
+            //     valueListenable: _controller.drawConfig,
+            //     shouldRebuild: (DrawConfig p, DrawConfig n) => p.strokeWidth != n.strokeWidth,
+            //     builder: (_, DrawConfig dc, ___) {
+            //       return Slider(
+            //         value: dc.strokeWidth,
+            //         max: 50,
+            //         min: 1,
+            //         onChanged: (double v) => _controller.setStyle(strokeWidth: v),
+            //       );
+            //     },
+            //   ),
+            // ),
+            // ColorPicBtn(controller: _controller),
+            IconButton(icon: const Icon(CupertinoIcons.arrow_turn_up_left), onPressed: () => _controller.undo()),
+            IconButton(icon: const Icon(CupertinoIcons.arrow_turn_up_right), onPressed: () => _controller.redo()),
+
+            /// <---------- Temporarily hide function ---------->
+            // IconButton(icon: const Icon(CupertinoIcons.rotate_right), onPressed: () => _controller.turn()),
+            IconButton(icon: const Icon(CupertinoIcons.trash), onPressed: () => _controller.clear()),
           ],
         ),
       ),
@@ -300,17 +283,19 @@ class _DrawingBoardState extends State<DrawingBoard> {
         padding: EdgeInsets.zero,
         child: ExValueBuilder<DrawConfig>(
           valueListenable: _controller.drawConfig,
-          shouldRebuild: (DrawConfig p, DrawConfig n) =>
-              p.contentType != n.contentType,
+          shouldRebuild: (DrawConfig p, DrawConfig n) => p.contentType != n.contentType,
           builder: (_, DrawConfig dc, ___) {
             final Type currType = dc.contentType;
-
             return Row(
-              children:
-                  (widget.defaultToolsBuilder?.call(currType, _controller) ??
+              children: <Widget>[
+                Row(
+                  children: (widget.defaultToolsBuilder?.call(currType, _controller) ??
                           DrawingBoard.defaultTools(currType, _controller))
                       .map((DefToolItem item) => _DefToolItemWidget(item: item))
                       .toList(),
+                ),
+                ColorPicBtn(controller: _controller),
+              ],
             );
           },
         ),
