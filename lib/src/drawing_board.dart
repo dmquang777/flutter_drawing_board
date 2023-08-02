@@ -303,12 +303,15 @@ class _DrawingBoardState extends State<DrawingBoard> {
           builder: (_, DrawConfig dc, ___) {
             final Type currType = dc.contentType;
             return BottomAppBar(
+              clipBehavior: Clip.hardEdge,
               color: Colors.black,
               elevation: 0,
               child: Container(
+                clipBehavior: Clip.hardEdge,
                 width: MediaQuery.of(context).size.width,
                 height: 88,
                 padding: const EdgeInsets.fromLTRB(64, 0, 64, 0),
+                decoration: const BoxDecoration(),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[

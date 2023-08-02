@@ -213,7 +213,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   background: Container(
                     width: constraints.maxWidth,
                     height: constraints.maxHeight,
-                    color: Colors.black,
+                    color: Colors.white,
                   ),
                   showDefaultActions: true,
                   showDefaultTools: true,
