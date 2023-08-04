@@ -188,6 +188,13 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  bool isDrawed = false;
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -201,28 +208,46 @@ class _MyHomePageState extends State<MyHomePage> {
           const SizedBox(width: 40),
         ],
       ),
-      body: Column(
+      body: Stack(
         children: <Widget>[
-          Expanded(
-            child: LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-                return DrawingBoard(
-                  boardPanEnabled: false,
-                  boardScaleEnabled: false,
-                  controller: _drawingController,
-                  background: Container(
-                    width: constraints.maxWidth,
-                    height: constraints.maxHeight,
-                    color: Colors.white,
-                  ),
-                  showDefaultActions: true,
-                  showDefaultTools: true,
-                  defaultToolsBuilder: (Type t, _) {
-                    return DrawingBoard.defaultTools(t, _drawingController);
-                  },
-                );
-              },
-            ),
+          LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              return DrawingBoard(
+                boardPanEnabled: false,
+                boardScaleEnabled: false,
+                controller: _drawingController,
+                background: Container(
+                  width: constraints.maxWidth,
+                  height: constraints.maxHeight,
+                  color: Colors.white,
+                ),
+                showDefaultActions: true,
+                onPointerMove: (PointerMoveEvent pme) => setState(() {}),
+                onInteractionUpdate: (ScaleUpdateDetails p0) => setState(() {}),
+                onUndo: () {
+                  _drawingController.undo();
+                  setState(() {});
+                },
+                onRefresh: () {
+                  _drawingController.clear();
+                  setState(() {});
+                },
+                showDefaultTools: true,
+                defaultToolsBuilder: (Type t, _) {
+                  return DrawingBoard.defaultTools(t, _drawingController);
+                },
+              );
+            },
+          ),
+          Positioned(
+            bottom: 88,
+            left: 0,
+            right: 0,
+            child: IconButton(
+                icon: Icon(_drawingController.currentIndex != 0 ? Icons.check : Icons.delete),
+                onPressed: () {
+                  print(_drawingController.currentIndex);
+                }),
           ),
         ],
       ),

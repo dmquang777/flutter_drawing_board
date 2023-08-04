@@ -50,6 +50,9 @@ class DrawingBoard extends StatefulWidget {
     this.onInteractionUpdate,
     this.transformationController,
     this.alignment = Alignment.topCenter,
+    this.onUndo,
+    this.onRedo,
+    this.onRefresh,
   }) : super(key: key);
 
   /// 画板背景控件
@@ -94,6 +97,9 @@ class DrawingBoard extends StatefulWidget {
   final double boardScaleFactor;
   final TransformationController? transformationController;
   final AlignmentGeometry alignment;
+  final Function()? onUndo;
+  final Function()? onRedo;
+  final Function()? onRefresh;
 
   /// 默认工具项列表
   static List<DefToolItem> defaultTools(Type currType, DrawingController controller) {
@@ -310,7 +316,7 @@ class _DrawingBoardState extends State<DrawingBoard> {
                 clipBehavior: Clip.hardEdge,
                 width: MediaQuery.of(context).size.width,
                 height: 88,
-                padding: const EdgeInsets.fromLTRB(64, 0, 64, 0),
+                padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
                 decoration: const BoxDecoration(),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -324,7 +330,7 @@ class _DrawingBoardState extends State<DrawingBoard> {
                     Row(
                       children: <Widget>[
                         FFilledButton.icon(
-                          onPressed: () => _controller.undo(),
+                          onPressed: widget.onUndo ?? () => _controller.undo(),
                           size: FButtonSize.size48,
                           backgroundColor: const Color(0xff1C2530),
                           child: Padding(
@@ -338,13 +344,27 @@ class _DrawingBoardState extends State<DrawingBoard> {
                         ),
                         const SizedBox(width: 12),
                         FFilledButton.icon(
-                          onPressed: () => _controller.redo(),
+                          onPressed: widget.onRedo ?? () => _controller.redo(),
                           size: FButtonSize.size48,
                           backgroundColor: const Color(0xff1C2530),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: FIcon(
                               icon: FOutlined.curved_arrow_right,
+                              size: 30,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        FFilledButton.icon(
+                          onPressed: widget.onRefresh ?? () => _controller.clear(),
+                          size: FButtonSize.size48,
+                          backgroundColor: const Color(0xff1C2530),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: FIcon(
+                              icon: FOutlined.refresh,
                               size: 30,
                               color: Colors.white,
                             ),
